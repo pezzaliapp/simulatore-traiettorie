@@ -24,11 +24,12 @@ function simulate() {
   ctx.strokeStyle = "#000";
   ctx.stroke();
 
-  // Variabili per l'animazione
-  let t = 0; // Tempo iniziale
-  const interval = 10; // Intervallo di animazione in millisecondi
+  // Variabili per la scala (dinamica)
   const scaleX = (canvas.width - 100) / maxDistance; // Scala per adattare la distanza
   const scaleY = (canvas.height - 100) / maxHeight; // Scala per adattare l'altezza
+
+  // Variabili per l'animazione
+  let t = 0; // Tempo iniziale
 
   // Funzione per animare il punto lungo la traiettoria
   function animate() {
@@ -42,14 +43,14 @@ function simulate() {
     const canvasX = 50 + x * scaleX;
     const canvasY = canvas.height - 50 - y * scaleY;
 
-    // Ripulisci il canvas e ridisegna tutto
+    // Ripulisci il canvas e ridisegna
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     // Disegna gli assi
     ctx.beginPath();
     ctx.moveTo(50, canvas.height - 50);
-    ctx.lineTo(canvas.width - 50, canvas.height - 50);
-    ctx.lineTo(50, 50);
+    ctx.lineTo(canvas.width - 50, canvas.height - 50); // Asse X
+    ctx.lineTo(50, 50); // Asse Y
     ctx.strokeStyle = "#000";
     ctx.stroke();
 
@@ -81,4 +82,7 @@ function simulate() {
 
   // Avvia l'animazione
   animate();
+
+  // Mostra i risultati in un popup
+  alert(`Distanza massima: ${maxDistance.toFixed(2)} m\nAltezza massima: ${maxHeight.toFixed(2)} m\nTempo totale: ${totalTime.toFixed(2)} s`);
 }
