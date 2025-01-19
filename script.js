@@ -42,7 +42,7 @@ function simulate() {
     const canvasX = 50 + x * scaleX;
     const canvasY = canvas.height - 50 - y * scaleY;
 
-    // Ripulisci e ridisegna
+    // Ripulisci il canvas e ridisegna tutto
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     // Disegna gli assi
@@ -53,10 +53,25 @@ function simulate() {
     ctx.strokeStyle = "#000";
     ctx.stroke();
 
+    // Disegna la traiettoria fino al punto attuale
+    ctx.beginPath();
+    ctx.moveTo(50, canvas.height - 50);
+    for (let i = 0; i <= t; i += 0.01) {
+      const xi = velocity * Math.cos(angle) * i;
+      const yi = velocity * Math.sin(angle) * i - 0.5 * gravity * i * i;
+
+      const canvasXi = 50 + xi * scaleX;
+      const canvasYi = canvas.height - 50 - yi * scaleY;
+
+      ctx.lineTo(canvasXi, canvasYi);
+    }
+    ctx.strokeStyle = "blue";
+    ctx.stroke();
+
     // Disegna il punto
     ctx.beginPath();
     ctx.arc(canvasX, canvasY, 5, 0, Math.PI * 2); // Punto come un cerchio
-    ctx.fillStyle = "blue";
+    ctx.fillStyle = "red";
     ctx.fill();
 
     // Incrementa il tempo
@@ -66,7 +81,4 @@ function simulate() {
 
   // Avvia l'animazione
   animate();
-
-  // Mostra i risultati in un popup
-  alert(`Distanza massima: ${maxDistance.toFixed(2)} m\nAltezza massima: ${maxHeight.toFixed(2)} m\nTempo totale: ${totalTime.toFixed(2)} s`);
 }
