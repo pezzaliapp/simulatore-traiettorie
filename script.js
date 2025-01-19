@@ -25,8 +25,8 @@ function simulate() {
   const canvas = document.getElementById("trajectory");
   const ctx = canvas.getContext("2d");
 
-  // Pulisci il canvas con sfondo nero
-  ctx.fillStyle = "#000000"; // Sfondo nero
+  // Pulisci il canvas con sfondo bianco
+  ctx.fillStyle = "#FFFFFF"; // Sfondo bianco
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
   // Calcola i parametri della traiettoria
@@ -53,19 +53,19 @@ function drawAxes(ctx, canvas) {
   ctx.moveTo(50, canvas.height - 50);
   ctx.lineTo(canvas.width - 50, canvas.height - 50); // Asse X
   ctx.lineTo(50, 50); // Asse Y
-  ctx.strokeStyle = "#FFFFFF"; // Bianco
+  ctx.strokeStyle = "#000000"; // Nero
   ctx.lineWidth = 1.5;
   ctx.stroke();
 
   // Etichette sugli assi
   ctx.font = "14px Arial";
-  ctx.fillStyle = "#FFFFFF"; // Bianco
+  ctx.fillStyle = "#000000"; // Nero
   ctx.fillText("Distanza (m)", canvas.width - 100, canvas.height - 30);
   ctx.fillText("Altezza (m)", 60, 40);
 }
 
 function drawGrid(ctx, canvas, scaleX, scaleY, maxDistance, maxHeight) {
-  ctx.strokeStyle = "#444444"; // Griglia grigia scura
+  ctx.strokeStyle = "#CCCCCC"; // Griglia grigia chiara
   ctx.lineWidth = 0.5;
 
   // Linee verticali (griglia per distanza)
@@ -76,7 +76,7 @@ function drawGrid(ctx, canvas, scaleX, scaleY, maxDistance, maxHeight) {
     ctx.lineTo(canvasX, 50);
     ctx.stroke();
     ctx.font = "10px Arial";
-    ctx.fillStyle = "#FFFFFF"; // Numeri bianchi
+    ctx.fillStyle = "#000000"; // Numeri neri
     ctx.fillText(x.toFixed(1), canvasX - 10, canvas.height - 35); // Etichette asse X
   }
 
@@ -88,7 +88,7 @@ function drawGrid(ctx, canvas, scaleX, scaleY, maxDistance, maxHeight) {
     ctx.lineTo(canvas.width - 50, canvasY);
     ctx.stroke();
     ctx.font = "10px Arial";
-    ctx.fillStyle = "#FFFFFF"; // Numeri bianchi
+    ctx.fillStyle = "#000000"; // Numeri neri
     ctx.fillText(y.toFixed(1), 25, canvasY + 5); // Etichette asse Y
   }
 }
@@ -105,7 +105,7 @@ function drawTrajectory(ctx, canvas, velocity, angle, gravity, scaleX, scaleY, t
 
     ctx.lineTo(canvasX, canvasY);
   }
-  ctx.strokeStyle = "#00FF00"; // Linea verde
+  ctx.strokeStyle = "#0000FF"; // Linea blu
   ctx.lineWidth = 1.5;
   ctx.stroke();
 }
@@ -119,8 +119,8 @@ function saveCanvas() {
   tempCanvas.width = canvas.width;
   tempCanvas.height = canvas.height;
 
-  // Copia il contenuto del canvas originale con sfondo nero
-  tempCtx.fillStyle = "#000000"; // Sfondo nero
+  // Copia il contenuto del canvas originale con sfondo bianco
+  tempCtx.fillStyle = "#FFFFFF"; // Sfondo bianco
   tempCtx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
   tempCtx.drawImage(canvas, 0, 0);
 
