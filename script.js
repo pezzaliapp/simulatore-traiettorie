@@ -32,6 +32,7 @@ function simulate() {
   const totalTime = (2 * velocity * Math.sin(angle)) / gravity; // Tempo totale di volo
   const maxDistance = velocity * Math.cos(angle) * totalTime; // Distanza massima
   const maxHeight = Math.pow(velocity * Math.sin(angle), 2) / (2 * gravity); // Altezza massima
+  const straightDistance = Math.sqrt(Math.pow(maxDistance, 2) + Math.pow(maxHeight, 2)); // Distanza in linea retta
 
   // Disegna gli assi
   drawAxes(ctx, canvas);
@@ -44,10 +45,13 @@ function simulate() {
   drawGrid(ctx, canvas, scaleX, scaleY, maxDistance, maxHeight);
 
   // Disegna la traiettoria completa
-  drawTrajectory(ctx, canvas, velocity, angle, gravity, scaleX, scaleY, totalTime);
+  const curvedDistance = drawTrajectory(ctx, canvas, velocity, angle, gravity, scaleX, scaleY, totalTime);
 
   // Anima il punto sulla traiettoria
   animatePoint(ctx, canvas, velocity, angle, gravity, scaleX, scaleY, totalTime);
+
+  // Mostra i risultati
+  displayResults(curvedDistance, straightDistance, totalTime);
 }
 
 function drawAxes(ctx, canvas) {
@@ -96,8 +100,13 @@ function drawGrid(ctx, canvas, scaleX, scaleY, maxDistance, maxHeight) {
 }
 
 function drawTrajectory(ctx, canvas, velocity, angle, gravity, scaleX, scaleY, totalTime) {
+  let curvedDistance = 0;
+  let previousX = 0;
+  let previousY = 0;
+
   ctx.beginPath();
   ctx.moveTo(50, canvas.height - 50); // Punto di partenza
+
   for (let t = 0; t <= totalTime; t += 0.01) {
     const x = velocity * Math.cos(angle) * t;
     const y = velocity * Math.sin(angle) * t - 0.5 * gravity * t * t;
@@ -105,11 +114,24 @@ function drawTrajectory(ctx, canvas, velocity, angle, gravity, scaleX, scaleY, t
     const canvasX = 50 + x * scaleX;
     const canvasY = canvas.height - 50 - y * scaleY;
 
+    if (t > 0) {
+      // Calcola la distanza curva tra i punti
+      const dx = x - previousX;
+      const dy = y - previousY;
+      curvedDistance += Math.sqrt(dx * dx + dy * dy);
+    }
+
     ctx.lineTo(canvasX, canvasY);
+
+    previousX = x;
+    previousY = y;
   }
+
   ctx.strokeStyle = "blue";
   ctx.lineWidth = 1.5;
   ctx.stroke();
+
+  return curvedDistance;
 }
 
 function animatePoint(ctx, canvas, velocity, angle, gravity, scaleX, scaleY, totalTime) {
@@ -143,6 +165,14 @@ function animatePoint(ctx, canvas, velocity, angle, gravity, scaleX, scaleY, tot
   }
 
   animate();
+}
+
+function displayResults(curvedDistance, straightDistance, totalTime) {
+  alert(
+    `Distanza percorsa (curva): ${curvedDistance.toFixed(2)} m\n` +
+    `Distanza percorsa (linea retta): ${straightDistance.toFixed(2)} m\n` +
+    `Tempo totale: ${totalTime.toFixed(2)} s`
+  );
 }
 
 function reset() {
