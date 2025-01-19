@@ -34,6 +34,23 @@ function simulate() {
   const maxHeight = Math.pow(velocity * Math.sin(angle), 2) / (2 * gravity); // Altezza massima
 
   // Disegna gli assi
+  drawAxes(ctx, canvas);
+
+  // Scala per adattare il grafico al canvas
+  const scaleX = (canvas.width - 100) / maxDistance; // Scala X
+  const scaleY = (canvas.height - 100) / maxHeight; // Scala Y
+
+  // Disegna la griglia
+  drawGrid(ctx, canvas, scaleX, scaleY, maxDistance, maxHeight);
+
+  // Disegna la traiettoria completa
+  drawTrajectory(ctx, canvas, velocity, angle, gravity, scaleX, scaleY, totalTime);
+
+  // Anima il punto sulla traiettoria
+  animatePoint(ctx, canvas, velocity, angle, gravity, scaleX, scaleY, totalTime);
+}
+
+function drawAxes(ctx, canvas) {
   ctx.beginPath();
   ctx.moveTo(50, canvas.height - 50);
   ctx.lineTo(canvas.width - 50, canvas.height - 50); // Asse X
@@ -46,84 +63,8 @@ function simulate() {
   ctx.fillStyle = "#000";
   ctx.fillText("Distanza (m)", canvas.width - 100, canvas.height - 30);
   ctx.fillText("Altezza (m)", 60, 40);
-
-  // Scala per adattare il grafico al canvas
-  const scaleX = (canvas.width - 100) / maxDistance; // Scala X
-  const scaleY = (canvas.height - 100) / maxHeight; // Scala Y
-
-  // Disegna la griglia
-  drawGrid(ctx, canvas, scaleX, scaleY, maxDistance, maxHeight);
-
-  // Disegna la traiettoria completa
-  ctx.beginPath();
-  ctx.moveTo(50, canvas.height - 50); // Punto di partenza
-  for (let t = 0; t <= totalTime; t += 0.01) {
-    const x = velocity * Math.cos(angle) * t;
-    const y = velocity * Math.sin(angle) * t - 0.5 * gravity * t * t;
-
-    const canvasX = 50 + x * scaleX;
-    const canvasY = canvas.height - 50 - y * scaleY;
-
-    ctx.lineTo(canvasX, canvasY);
-  }
-  ctx.strokeStyle = "blue";
-  ctx.stroke();
-
-  // Variabili per l'animazione
-  let t = 0;
-
-  // Funzione per animare il punto lungo la traiettoria
-  function animate() {
-    if (t > totalTime) return; // Fine dell'animazione
-
-    const x = velocity * Math.cos(angle) * t;
-    const y = velocity * Math.sin(angle) * t - 0.5 * gravity * t * t;
-
-    const canvasX = 50 + x * scaleX;
-    const canvasY = canvas.height - 50 - y * scaleY;
-
-    // Ripulisci il canvas e ridisegna
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    // Ridisegna gli assi e la griglia
-    ctx.beginPath();
-    ctx.moveTo(50, canvas.height - 50);
-    ctx.lineTo(canvas.width - 50, canvas.height - 50); // Asse X
-    ctx.lineTo(50, 50); // Asse Y
-    ctx.strokeStyle = "#000";
-    ctx.stroke();
-
-    drawGrid(ctx, canvas, scaleX, scaleY, maxDistance, maxHeight);
-
-    // Ridisegna la traiettoria completa
-    ctx.beginPath();
-    ctx.moveTo(50, canvas.height - 50);
-    for (let i = 0; i <= totalTime; i += 0.01) {
-      const xi = velocity * Math.cos(angle) * i;
-      const yi = velocity * Math.sin(angle) * i - 0.5 * gravity * i * i;
-
-      const canvasXi = 50 + xi * scaleX;
-      const canvasYi = canvas.height - 50 - yi * scaleY;
-
-      ctx.lineTo(canvasXi, canvasYi);
-    }
-    ctx.strokeStyle = "blue";
-    ctx.stroke();
-
-    // Disegna il punto animato
-    ctx.beginPath();
-    ctx.arc(canvasX, canvasY, 5, 0, Math.PI * 2);
-    ctx.fillStyle = "red";
-    ctx.fill();
-
-    t += 0.02; // Incrementa il tempo per l'animazione
-    requestAnimationFrame(animate);
-  }
-
-  animate();
 }
 
-// Funzione per disegnare la griglia
 function drawGrid(ctx, canvas, scaleX, scaleY, maxDistance, maxHeight) {
   ctx.strokeStyle = "#ddd";
   ctx.lineWidth = 0.5;
@@ -147,7 +88,55 @@ function drawGrid(ctx, canvas, scaleX, scaleY, maxDistance, maxHeight) {
   }
 }
 
-// Funzione per resettare il canvas e i valori di input
+function drawTrajectory(ctx, canvas, velocity, angle, gravity, scaleX, scaleY, totalTime) {
+  ctx.beginPath();
+  ctx.moveTo(50, canvas.height - 50); // Punto di partenza
+  for (let t = 0; t <= totalTime; t += 0.01) {
+    const x = velocity * Math.cos(angle) * t;
+    const y = velocity * Math.sin(angle) * t - 0.5 * gravity * t * t;
+
+    const canvasX = 50 + x * scaleX;
+    const canvasY = canvas.height - 50 - y * scaleY;
+
+    ctx.lineTo(canvasX, canvasY);
+  }
+  ctx.strokeStyle = "blue";
+  ctx.stroke();
+}
+
+function animatePoint(ctx, canvas, velocity, angle, gravity, scaleX, scaleY, totalTime) {
+  let t = 0;
+
+  function animate() {
+    if (t > totalTime) return; // Fine dell'animazione
+
+    const x = velocity * Math.cos(angle) * t;
+    const y = velocity * Math.sin(angle) * t - 0.5 * gravity * t * t;
+
+    const canvasX = 50 + x * scaleX;
+    const canvasY = canvas.height - 50 - y * scaleY;
+
+    // Ripulisci il canvas e ridisegna
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Ridisegna gli assi, la griglia e la traiettoria
+    drawAxes(ctx, canvas);
+    drawGrid(ctx, canvas, scaleX, scaleY, velocity * Math.cos(angle) * totalTime, Math.pow(velocity * Math.sin(angle), 2) / (2 * gravity));
+    drawTrajectory(ctx, canvas, velocity, angle, gravity, scaleX, scaleY, totalTime);
+
+    // Disegna il punto animato
+    ctx.beginPath();
+    ctx.arc(canvasX, canvasY, 5, 0, Math.PI * 2);
+    ctx.fillStyle = "red";
+    ctx.fill();
+
+    t += 0.02; // Incrementa il tempo per l'animazione
+    requestAnimationFrame(animate);
+  }
+
+  animate();
+}
+
 function reset() {
   const canvas = document.getElementById("trajectory");
   const ctx = canvas.getContext("2d");
@@ -158,7 +147,6 @@ function reset() {
   document.getElementById("gravity").value = 9.81;
 }
 
-// Funzione per salvare il grafico come immagine
 function saveCanvas() {
   const canvas = document.getElementById("trajectory");
   const link = document.createElement("a");
