@@ -24,7 +24,15 @@
   <button onclick="simulate()">Calcola Traiettoria</button>
   <button onclick="reset()">Reset</button>
   <button onclick="saveCanvas()">Salva Grafico</button>
+  
   <canvas id="trajectory" width="600" height="400"></canvas>
+
+  <!-- Sezione per mostrare i risultati -->
+  <div id="results">
+    <p>Distanza in linea retta: <span id="straightDistance">-</span> m</p>
+    <p>Distanza percorsa lungo la traiettoria: <span id="curvedDistance">-</span> m</p>
+    <p>Tempo totale impiegato: <span id="totalTime">-</span> s</p>
+  </div>
 
   <!-- Riferimento al JS senza cache-busting -->
   <script src="script.js"></script>
