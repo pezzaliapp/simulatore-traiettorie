@@ -11,7 +11,7 @@ canvas {
   display: block;
   margin: 20px auto;
   background-color: #ffffff;
-  max-width: 100%; /* Adatta il canvas alla larghezza del dispositivo */
+  max-width: 100%;
   height: auto;
 }
 
