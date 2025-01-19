@@ -1,14 +1,3 @@
-// Forza il refresh della cache all'avvio
-(function resetCache() {
-  const links = document.querySelectorAll('link[rel="stylesheet"], script');
-  links.forEach((link) => {
-    const url = new URL(link.href || link.src);
-    url.searchParams.set('cachebuster', Date.now());
-    if (link.tagName === 'LINK') link.href = url.href;
-    if (link.tagName === 'SCRIPT') link.src = url.href;
-  });
-})();
-
 function simulate() {
   const velocity = parseFloat(document.getElementById("velocity").value);
   const angle = parseFloat(document.getElementById("angle").value) * (Math.PI / 180);
