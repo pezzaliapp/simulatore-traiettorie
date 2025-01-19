@@ -56,6 +56,7 @@ function drawAxes(ctx, canvas) {
   ctx.lineTo(canvas.width - 50, canvas.height - 50); // Asse X
   ctx.lineTo(50, 50); // Asse Y
   ctx.strokeStyle = "#000";
+  ctx.lineWidth = 1;
   ctx.stroke();
 
   // Etichette sugli assi
@@ -76,6 +77,9 @@ function drawGrid(ctx, canvas, scaleX, scaleY, maxDistance, maxHeight) {
     ctx.moveTo(canvasX, canvas.height - 50);
     ctx.lineTo(canvasX, 50);
     ctx.stroke();
+    ctx.font = "10px Arial";
+    ctx.fillStyle = "#000";
+    ctx.fillText(x.toFixed(1), canvasX - 10, canvas.height - 35); // Etichette asse X
   }
 
   // Linee orizzontali (griglia per altezza)
@@ -85,6 +89,9 @@ function drawGrid(ctx, canvas, scaleX, scaleY, maxDistance, maxHeight) {
     ctx.moveTo(50, canvasY);
     ctx.lineTo(canvas.width - 50, canvasY);
     ctx.stroke();
+    ctx.font = "10px Arial";
+    ctx.fillStyle = "#000";
+    ctx.fillText(y.toFixed(1), 25, canvasY + 5); // Etichette asse Y
   }
 }
 
@@ -101,6 +108,7 @@ function drawTrajectory(ctx, canvas, velocity, angle, gravity, scaleX, scaleY, t
     ctx.lineTo(canvasX, canvasY);
   }
   ctx.strokeStyle = "blue";
+  ctx.lineWidth = 1.5;
   ctx.stroke();
 }
 
