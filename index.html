@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="it">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Simulatore di Traiettorie</title>
-  <!-- Forza l'aggiornamento della cache -->
-  <link rel="stylesheet" href="style.css?v=<?=Date.now()?>">
+  <!-- Riferimento al CSS senza cache-busting -->
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <h1>Simulatore di Traiettorie Balistiche</h1>
@@ -26,7 +26,7 @@
   <button onclick="saveCanvas()">Salva Grafico</button>
   <canvas id="trajectory" width="600" height="400"></canvas>
 
-  <!-- Forza l'aggiornamento della cache -->
-  <script src="script.js?v=<?=Date.now()?>"></script>
+  <!-- Riferimento al JS senza cache-busting -->
+  <script src="script.js"></script>
 </body>
 </html>
