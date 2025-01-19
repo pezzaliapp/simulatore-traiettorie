@@ -1,3 +1,14 @@
+// Forza il refresh della cache per caricare sempre la versione aggiornata
+(function resetCache() {
+  const links = document.querySelectorAll('link[rel="stylesheet"], script');
+  links.forEach((link) => {
+    const url = new URL(link.href || link.src);
+    url.searchParams.set('cachebuster', Date.now());
+    if (link.tagName === 'LINK') link.href = url.href;
+    if (link.tagName === 'SCRIPT') link.src = url.href;
+  });
+})();
+
 function simulate() {
   // Leggi i valori di input
   const velocity = parseFloat(document.getElementById("velocity").value);
@@ -101,11 +112,10 @@ function drawTrajectory(ctx, canvas, velocity, angle, gravity, scaleX, scaleY, t
 
 function saveCanvas() {
   const canvas = document.getElementById("trajectory");
-  const ctx = canvas.getContext("2d");
-
-  // Salva il canvas con sfondo bianco
   const tempCanvas = document.createElement("canvas");
   const tempCtx = tempCanvas.getContext("2d");
+
+  // Dimensioni del canvas temporaneo
   tempCanvas.width = canvas.width;
   tempCanvas.height = canvas.height;
 
@@ -114,9 +124,19 @@ function saveCanvas() {
   tempCtx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
   tempCtx.drawImage(canvas, 0, 0);
 
-  // Scarica il canvas come immagine
+  // Salva il canvas come immagine
   const link = document.createElement("a");
   link.download = "traiettoria.png";
   link.href = tempCanvas.toDataURL("image/png");
   link.click();
+}
+
+function reset() {
+  const canvas = document.getElementById("trajectory");
+  const ctx = canvas.getContext("2d");
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  document.getElementById("velocity").value = 50;
+  document.getElementById("angle").value = 45;
+  document.getElementById("gravity").value = 9.81;
 }
