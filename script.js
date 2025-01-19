@@ -176,11 +176,3 @@ function reset() {
   document.getElementById("curvedDistance").textContent = "-";
   document.getElementById("totalTime").textContent = "-";
 }
-
-function saveCanvas() {
-  const canvas = document.getElementById("trajectory");
-  const link = document.createElement("a");
-  link.download = "traiettoria.png";
-  link.href = canvas.toDataURL("image/png");
-  link.click();
-}
