@@ -1,4 +1,4 @@
-// Forza il refresh della cache aggiungendo un parametro univoco ai file CSS e JS
+// Forza il refresh della cache per caricare sempre la versione aggiornata
 (function resetCache() {
   const links = document.querySelectorAll('link[rel="stylesheet"], script');
   links.forEach((link) => {
@@ -51,7 +51,7 @@ function simulate() {
   animatePoint(ctx, canvas, velocity, angle, gravity, scaleX, scaleY, totalTime);
 
   // Mostra i risultati
-  displayResults(curvedDistance, straightDistance, totalTime);
+  displayResults(maxDistance, curvedDistance, straightDistance, totalTime);
 }
 
 function drawAxes(ctx, canvas) {
@@ -167,12 +167,14 @@ function animatePoint(ctx, canvas, velocity, angle, gravity, scaleX, scaleY, tot
   animate();
 }
 
-function displayResults(curvedDistance, straightDistance, totalTime) {
-  alert(
-    `Distanza percorsa (curva): ${curvedDistance.toFixed(2)} m\n` +
-    `Distanza percorsa (linea retta): ${straightDistance.toFixed(2)} m\n` +
-    `Tempo totale: ${totalTime.toFixed(2)} s`
-  );
+function displayResults(maxDistance, curvedDistance, straightDistance, totalTime) {
+  const results = `
+    Distanza massima percorsa (curva): ${curvedDistance.toFixed(2)} m
+    Distanza in linea retta: ${straightDistance.toFixed(2)} m
+    Tempo totale di volo: ${totalTime.toFixed(2)} s
+    Distanza massima orizzontale: ${maxDistance.toFixed(2)} m
+  `;
+  alert(results);
 }
 
 function reset() {
