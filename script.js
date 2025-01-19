@@ -4,6 +4,12 @@ function simulate() {
   const angle = parseFloat(document.getElementById("angle").value) * (Math.PI / 180); // Converti in radianti
   const gravity = parseFloat(document.getElementById("gravity").value);
 
+  // Controllo dei parametri
+  if (isNaN(velocity) || isNaN(angle) || isNaN(gravity) || velocity <= 0 || gravity <= 0) {
+    alert("Inserisci valori validi per velocità, angolo e gravità!");
+    return;
+  }
+
   // Ottieni il canvas e il contesto
   const canvas = document.getElementById("trajectory");
   const ctx = canvas.getContext("2d");
@@ -15,6 +21,10 @@ function simulate() {
   const totalTime = (2 * velocity * Math.sin(angle)) / gravity; // Tempo totale di volo
   const maxDistance = velocity * Math.cos(angle) * totalTime; // Distanza massima
   const maxHeight = Math.pow(velocity * Math.sin(angle), 2) / (2 * gravity); // Altezza massima
+
+  // Log per il debug
+  console.log(`Velocità: ${velocity}, Angolo: ${angle}, Gravità: ${gravity}`);
+  console.log(`Tempo totale: ${totalTime}, Distanza massima: ${maxDistance}, Altezza massima: ${maxHeight}`);
 
   // Disegna gli assi
   ctx.beginPath();
