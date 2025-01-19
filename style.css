@@ -1,0 +1,36 @@
+/* Stile generale del corpo */
+body {
+  font-family: Arial, sans-serif;
+  text-align: center;
+  padding: 20px;
+  background-color: #f4f4f9;
+  color: #333;
+}
+
+/* Canvas (per la traiettoria) */
+canvas {
+  border: 1px solid black;
+  display: block;
+  margin: 20px auto;
+  background-color: #ffffff;
+}
+
+/* Input e pulsanti */
+input, button {
+  margin: 5px;
+  padding: 8px 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+button {
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+  border: none;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
