@@ -16,6 +16,18 @@ function simulate() {
   const maxDistance = velocity * Math.cos(angle) * totalTime;
   const maxHeight = Math.pow(velocity * Math.sin(angle), 2) / (2 * gravity);
 
+  // Calcolo della distanza in linea retta (maxDistance)
+  const straightDistance = maxDistance;
+
+  // Calcolo della distanza percorsa lungo la traiettoria (curvilinea)
+  const curvedDistance = calculateCurvedDistance(velocity, angle, gravity, totalTime);
+
+  // Aggiornamento dei risultati nel DOM
+  document.getElementById("straightDistance").textContent = straightDistance.toFixed(2);
+  document.getElementById("curvedDistance").textContent = curvedDistance.toFixed(2);
+  document.getElementById("totalTime").textContent = totalTime.toFixed(2);
+
+  // Disegno degli assi
   ctx.beginPath();
   ctx.moveTo(50, canvas.height - 50);
   ctx.lineTo(canvas.width - 50, canvas.height - 50);
@@ -23,6 +35,7 @@ function simulate() {
   ctx.strokeStyle = "#000";
   ctx.stroke();
 
+  // Etichette degli assi
   ctx.font = "14px Arial";
   ctx.fillStyle = "#000";
   ctx.fillText("Distanza (m)", canvas.width - 100, canvas.height - 30);
@@ -31,8 +44,10 @@ function simulate() {
   const scaleX = (canvas.width - 100) / maxDistance;
   const scaleY = (canvas.height - 100) / maxHeight;
 
+  // Disegno della griglia
   drawGrid(ctx, canvas, scaleX, scaleY, maxDistance, maxHeight);
 
+  // Disegno della traiettoria
   ctx.beginPath();
   ctx.moveTo(50, canvas.height - 50);
   for (let i = 0; i <= totalTime; i += 0.01) {
@@ -47,6 +62,7 @@ function simulate() {
   ctx.stroke();
   ctx.setLineDash([]);
 
+  // Animazione del pallino rosso
   let t = 0;
   function animate() {
     if (t > totalTime) return;
@@ -58,6 +74,7 @@ function simulate() {
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+    // Ridisegno degli assi e della griglia
     ctx.beginPath();
     ctx.moveTo(50, canvas.height - 50);
     ctx.lineTo(canvas.width - 50, canvas.height - 50);
@@ -67,6 +84,7 @@ function simulate() {
 
     drawGrid(ctx, canvas, scaleX, scaleY, maxDistance, maxHeight);
 
+    // Ridisegno della traiettoria
     ctx.beginPath();
     ctx.moveTo(50, canvas.height - 50);
     for (let i = 0; i <= totalTime; i += 0.01) {
@@ -79,6 +97,7 @@ function simulate() {
     ctx.strokeStyle = "rgba(0, 0, 255, 0.3)";
     ctx.stroke();
 
+    // Disegno del pallino rosso
     ctx.beginPath();
     ctx.arc(canvasX, canvasY, 5, 0, Math.PI * 2);
     ctx.fillStyle = "red";
@@ -88,6 +107,29 @@ function simulate() {
     requestAnimationFrame(animate);
   }
   animate();
+}
+
+function calculateCurvedDistance(velocity, angle, gravity, totalTime) {
+  const dt = 0.01; // Passo di integrazione
+  let distance = 0;
+  let previousX = 0;
+  let previousY = 0;
+
+  for (let t = 0; t <= totalTime; t += dt) {
+    const x = velocity * Math.cos(angle) * t;
+    const y = velocity * Math.sin(angle) * t - 0.5 * gravity * t * t;
+
+    if (t > 0) {
+      const dx = x - previousX;
+      const dy = y - previousY;
+      distance += Math.sqrt(dx * dx + dy * dy);
+    }
+
+    previousX = x;
+    previousY = y;
+  }
+
+  return distance;
 }
 
 function drawGrid(ctx, canvas, scaleX, scaleY, maxDistance, maxHeight) {
@@ -118,6 +160,11 @@ function reset() {
   document.getElementById("velocity").value = 50;
   document.getElementById("angle").value = 45;
   document.getElementById("gravity").value = 9.81;
+
+  // Reset dei risultati
+  document.getElementById("straightDistance").textContent = "-";
+  document.getElementById("curvedDistance").textContent = "-";
+  document.getElementById("totalTime").textContent = "-";
 }
 
 function saveCanvas() {
